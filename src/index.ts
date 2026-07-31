@@ -1,7 +1,9 @@
+import { config } from "./config.ts";
+import { OpenRouterService } from "./openrouterService.ts";
 import { createServer } from "./server.ts";
 
-
-const app = createServer()
+const routerService = new OpenRouterService(config)
+const app = createServer(routerService)
 const host = '0.0.0.0'
 const port = Number(process.env.PORT ?? 3000)
 
@@ -18,4 +20,15 @@ try {
 }
 console.log(`Server listening on port ${port}`)
 
-console.log('test') 
+// console.log('test')
+
+// await app.listen({ port: 3000, host: '0.0.0.0' })
+
+// app.inject({
+//   method: 'POST',
+//   url: '/chat',
+//   body: { question: 'What is the capital of France?'}
+// }).then((response) => {
+//   console.log('Response status: ', response.statusCode)
+//   console.log('Response body: ', response.body)
+// })
