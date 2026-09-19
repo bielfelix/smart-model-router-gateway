@@ -10,13 +10,14 @@ export type LLMResponse = {
 export class OpenRouterService {
     private client: OpenRouter
     private config: ModelConfig
+
     constructor(configOverride?: ModelConfig) {
         this.config = configOverride ?? config
 
         this.client = new OpenRouter({
-            apiKey: config.apiKey,
-            httpReferer: config.httpReferer,
-            xTitle: config.xTitle
+            apiKey: this.config.apiKey,
+            httpReferer: this.config.httpReferer,
+            xTitle: this.config.xTitle
         })
     }
 
@@ -33,10 +34,9 @@ export class OpenRouterService {
             provider: this.config.provider as ChatGenerationParams['provider']
         })
 
-        const content = String(response.choices.at(0)?.message.content) ?? ''
         return {
             model: response.model,
-            content
+            content: response.choices.at(0)?.message.content?.toString() ?? ''
         }
     }
 }
