@@ -1,0 +1,25 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  syntax:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - run: npm ci
+      - run: node --experimental-strip-types --check src/index.ts
+      - run: node --experimental-strip-types --check src/config.ts
+      - run: node --experimental-strip-types --check src/openrouterService.ts
+      - run: node --experimental-strip-types --check src/server.ts
