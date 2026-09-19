@@ -11,9 +11,9 @@ https://github.com/unipds-engenharia-de-ia-aplicada/engenharia-de-software-com-i
 
 I keep that origin explicit.
 
-The current version extends the original exercise with independently implemented routing behavior, provider abstraction, sequential model fallback, request limits, health reporting, deterministic provider-free tests and structured routing metadata.
+The current version extends the original source implementation with independently implemented routing behavior, provider abstraction, sequential model fallback, request limits, health reporting, deterministic provider-free tests and structured routing metadata.
 
-It should be read as an source-attributed technical implementation with original engineering work on top of the externally authored base, not as a project whose entire history was created from scratch.
+It should be read as a source-attributed technical implementation with original engineering work on top of the externally authored base, not as a project whose entire history was created from scratch.
 
 ## Current architecture
 
