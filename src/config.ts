@@ -1,49 +1,51 @@
-// import { config as loadEnv } from 'dotenv'
+import 'dotenv/config'
+import { routingStrategies, type RoutingStrategy } from './types.ts'
 
-// loadEnv()
+const fallbackModels = [
+    'nvidia/nemotron-3-ultra-550b-a55b:free',
+    'inclusionai/ling-3.0-flash:free',
+    'openai/gpt-oss-20b:free',
+]
 
-console.assert(
-    process.env.OPENROUTER_API_KEY,
-    'OPENROUTER_API_KEY is not set in env variables'
-)
+const parseModels = (value?: string): string[] => {
+    const models = value
+        ?.split(',')
+        .map((model) => model.trim())
+        .filter(Boolean)
 
-export type ModelConfig = {
-    apiKey: string;
-    httpReferer: string;
-    xTitle: string;
-    port: number;
-    models: string[];
-    temperature: number;
-    maxTokens: number;
-    systemPrompt: string;
-
-    provider: {
-        sort: {
-            by: string,
-            partition: string,
-        }
-    }
+    return models?.length ? models : fallbackModels
 }
 
-export const config: ModelConfig = {
-    apiKey: process.env.OPENROUTER_API_KEY!,
-    httpReferer: 'http://pos-ia.com',
-    xTitle: 'SmartModelRouterGateway',
-    port: 3000,
-    models: [
-        'nvidia/nemotron-3-ultra-550b-a55b:free',
-        'inclusionai/ling-3.0-flash:free',
-        'openai/gpt-oss-20b:free',
-    ],
-    temperature: 0.2,
-    maxTokens: 50,
-    systemPrompt: 'You are a helpful assistant.',
-    provider: {
-        sort: {
-            by: 'throughput',
-            // by: 'latency',
-            // by: 'price',
-            partition: 'none'
-        }
-    }
+const parseStrategy = (value?: string): RoutingStrategy => {
+    return routingStrategies.includes(value as RoutingStrategy)
+        ? value as RoutingStrategy
+        : 'throughput'
+}
+
+export type RouterConfig = {
+    apiKey: string
+    httpReferer: string
+    xTitle: string
+    port: number
+    models: string[]
+    defaultStrategy: RoutingStrategy
+    temperature: number
+    maxTokens: number
+    maxPromptChars: number
+    systemPrompt: string
+    providerPartition: string
+}
+
+export const config: RouterConfig = {
+    apiKey: process.env.OPENROUTER_API_KEY ?? '',
+    httpReferer: process.env.OPENROUTER_HTTP_REFERER ?? 'https://github.com/bielfelix/smart-model-router-gateway',
+    xTitle: process.env.OPENROUTER_APP_TITLE ?? 'Smart Model Router Gateway',
+    port: Number(process.env.PORT ?? 3000),
+    models: parseModels(process.env.ROUTER_MODELS),
+    defaultStrategy: parseStrategy(process.env.ROUTER_STRATEGY),
+    temperature: Number(process.env.ROUTER_TEMPERATURE ?? 0.2),
+    maxTokens: Number(process.env.ROUTER_MAX_TOKENS ?? 256),
+    maxPromptChars: Number(process.env.ROUTER_MAX_PROMPT_CHARS ?? 8000),
+    systemPrompt: process.env.ROUTER_SYSTEM_PROMPT ?? 'You are a helpful assistant.',
+    providerPartition: process.env.ROUTER_PROVIDER_PARTITION ?? 'none',
 }

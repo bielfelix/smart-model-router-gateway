@@ -1,42 +1,50 @@
-import { OpenRouter } from "@openrouter/sdk";
-import { config, type ModelConfig } from "./config.ts";
-import { type ChatGenerationParams } from "@openrouter/sdk/models";
+import { OpenRouter } from '@openrouter/sdk'
+import { type ChatGenerationParams } from '@openrouter/sdk/models'
+import type { RouterConfig } from './config.ts'
+import type { ModelProvider, ProviderRequest, ProviderResponse } from './types.ts'
 
-export type LLMResponse = {
-    model: string;
-    content: string;
-}
+export class OpenRouterService implements ModelProvider {
+    private readonly client: OpenRouter
 
-export class OpenRouterService {
-    private client: OpenRouter
-    private config: ModelConfig
-
-    constructor(configOverride?: ModelConfig) {
-        this.config = configOverride ?? config
+    constructor(private readonly config: RouterConfig) {
+        if (!config.apiKey) {
+            throw new Error('OPENROUTER_API_KEY is required to start the gateway')
+        }
 
         this.client = new OpenRouter({
-            apiKey: this.config.apiKey,
-            httpReferer: this.config.httpReferer,
-            xTitle: this.config.xTitle
+            apiKey: config.apiKey,
+            httpReferer: config.httpReferer,
+            xTitle: config.xTitle,
         })
     }
 
-    async generate(prompt: string): Promise<LLMResponse> {
+    async generate(input: ProviderRequest): Promise<ProviderResponse> {
         const response = await this.client.chat.send({
-            models: this.config.models,
+            models: [input.model],
             messages: [
-                { role: 'system', content: this.config.systemPrompt },
-                { role: 'user', content: prompt }
+                { role: 'system', content: input.systemPrompt },
+                { role: 'user', content: input.question },
             ],
             stream: false,
-            temperature: this.config.temperature,
-            maxTokens: this.config.maxTokens,
-            provider: this.config.provider as ChatGenerationParams['provider']
+            temperature: input.temperature,
+            maxTokens: input.maxTokens,
+            provider: {
+                sort: {
+                    by: input.strategy,
+                    partition: this.config.providerPartition,
+                },
+            } as ChatGenerationParams['provider'],
         })
 
+        const content = response.choices.at(0)?.message.content?.toString().trim()
+
+        if (!content) {
+            throw new Error('Provider returned an empty response')
+        }
+
         return {
-            model: response.model,
-            content: response.choices.at(0)?.message.content?.toString() ?? ''
+            model: response.model || input.model,
+            content,
         }
     }
 }
