@@ -4,7 +4,7 @@ A small TypeScript gateway for routing LLM requests through OpenRouter with expl
 
 ## Project background
 
-This repository started from course material from the Software Engineering with Applied AI program published by UNIPDS and Erick Wendel.
+This repository started from source material from the Software Engineering with Applied AI program published by UNIPDS and Erick Wendel.
 
 Upstream material:
 https://github.com/unipds-engenharia-de-ia-aplicada/engenharia-de-software-com-ia-aplicada
@@ -13,7 +13,7 @@ I keep that origin explicit.
 
 The current version extends the original exercise with independently implemented routing behavior, provider abstraction, sequential model fallback, request limits, health reporting, deterministic provider-free tests and structured routing metadata.
 
-It should be read as an extended study project with original engineering work on top of the educational base, not as a project whose entire history was created from scratch.
+It should be read as an extended technical implementation with original engineering work on top of the externally authored base, not as a project whose entire history was created from scratch.
 
 ## Current architecture
 
