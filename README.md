@@ -202,3 +202,8 @@ It does not currently implement:
 - adaptive routing from historical performance.
 
 Those features should be added only when the project has a concrete need for them rather than as portfolio decoration.
+
+
+## License and distribution
+
+The upstream course repository is published under CC BY-NC-ND 4.0. Its LICENSE.md states that modified or adapted versions may not be distributed under the NoDerivatives condition. This repository is therefore not presented as a permissively licensed open-source derivative. See [NOTICE.md](NOTICE.md) for the provenance and licensing note.
