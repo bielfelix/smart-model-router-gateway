@@ -4,7 +4,7 @@ A small TypeScript gateway for routing LLM requests through OpenRouter with expl
 
 ## Project background
 
-This repository originated from source material from the Software Engineering with Applied AI program published by UNIPDS and Erick Wendel.
+This repository originated from external source material published by UNIPDS and Erick Wendel.
 
 Upstream material:
 https://github.com/unipds-engenharia-de-ia-aplicada/engenharia-de-software-com-ia-aplicada
@@ -206,4 +206,4 @@ Those features should be added only when the project has a concrete need for the
 
 ## License and distribution
 
-The upstream course repository is published under CC BY-NC-ND 4.0. Its LICENSE.md states that modified or adapted versions may not be distributed under the NoDerivatives condition. This repository is therefore not presented as a permissively licensed open-source derivative. See [NOTICE.md](NOTICE.md) for the provenance and licensing note.
+The upstream source repository is published under CC BY-NC-ND 4.0. Its LICENSE.md states that modified or adapted versions may not be distributed under the NoDerivatives condition. This repository is therefore not presented as a permissively licensed open-source derivative. See [NOTICE.md](NOTICE.md) for the provenance and licensing note.
