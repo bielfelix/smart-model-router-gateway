@@ -12,11 +12,13 @@ import {
 export class RequestLimitError extends Error {}
 
 export class RoutingExhaustedError extends Error {
-    constructor(
-        public readonly requestId: string,
-        public readonly attempts: RoutingAttempt[],
-    ) {
+    public readonly requestId: string
+    public readonly attempts: RoutingAttempt[]
+
+    constructor(requestId: string, attempts: RoutingAttempt[]) {
         super('All configured models failed')
+        this.requestId = requestId
+        this.attempts = attempts
     }
 }
 
@@ -26,10 +28,13 @@ export type GenerateOptions = {
 }
 
 export class ModelRouter {
-    constructor(
-        private readonly provider: ModelProvider,
-        private readonly config: RouterConfig,
-    ) {}
+    private readonly provider: ModelProvider
+    private readonly config: RouterConfig
+
+    constructor(provider: ModelProvider, config: RouterConfig) {
+        this.provider = provider
+        this.config = config
+    }
 
     capabilities() {
         return {

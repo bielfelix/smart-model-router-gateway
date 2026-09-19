@@ -7,8 +7,11 @@ import type { ModelProvider, ProviderRequest, ProviderResponse } from '../src/ty
 
 class FakeProvider implements ModelProvider {
     public readonly calls: ProviderRequest[] = []
+    private readonly failingModels: Set<string>
 
-    constructor(private readonly failingModels = new Set<string>()) {}
+    constructor(failingModels = new Set<string>()) {
+        this.failingModels = failingModels
+    }
 
     async generate(input: ProviderRequest): Promise<ProviderResponse> {
         this.calls.push(input)

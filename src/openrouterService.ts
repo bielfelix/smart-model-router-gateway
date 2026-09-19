@@ -5,12 +5,14 @@ import type { ModelProvider, ProviderRequest, ProviderResponse } from './types.t
 
 export class OpenRouterService implements ModelProvider {
     private readonly client: OpenRouter
+    private readonly config: RouterConfig
 
-    constructor(private readonly config: RouterConfig) {
+    constructor(config: RouterConfig) {
         if (!config.apiKey) {
             throw new Error('OPENROUTER_API_KEY is required to start the gateway')
         }
 
+        this.config = config
         this.client = new OpenRouter({
             apiKey: config.apiKey,
             httpReferer: config.httpReferer,
