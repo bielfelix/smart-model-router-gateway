@@ -2,7 +2,7 @@ import Fastify from "fastify";
 import { OpenRouterService } from "./openrouterService.ts";
 
 export const createServer = (routerService: OpenRouterService) => {
-    const app = Fastify({ logger: false})
+    const app = Fastify({ logger: true })
 
     app.post('/chat', {
         schema: {
@@ -10,18 +10,17 @@ export const createServer = (routerService: OpenRouterService) => {
                 type: 'object',
                 required: ['question'],
                 properties: {
-                    question: { type: 'string', minLength: 5}
+                    question: { type: 'string', minLength: 5 }
                 }
             }
         }
     }, async (request, reply) => {
         try {
             const { question } = request.body as { question: string }
-            const response = await routerService.generate(question)
-            return reply.send(response)
+            return await routerService.generate(question)
         } catch (error) {
-            console.error('Error hadling /chat request: ', error)
-            return reply.code(500)
+            request.log.error({ err: error }, 'OpenRouter request failed')
+            return reply.code(502).send({ error: 'Upstream model request failed' })
         }
     })
 
